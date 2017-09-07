@@ -11,6 +11,10 @@
     <properties>
         <jfinal.version>3.0</jfinal.version>
         <log4j2.version>2.7</log4j2.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <warPackageName>/ironman</warPackageName>
+        <tomcat.deploy.server>aliyun</tomcat.deploy.server>
+        <tomcat.deploy.serverUrl>http://101.132.72.137:8080/manager/text</tomcat.deploy.serverUrl>
     </properties>
     <dependencies>
         <dependency>
@@ -109,7 +113,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.11</version>
             <scope>test</scope>
         </dependency>
 
@@ -178,5 +182,28 @@
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
         </dependency>
+
     </dependencies>
+
+
+    <build>
+        <finalName>${warPackageName}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <server>${tomcat.deploy.server}</server>
+                    <url>${tomcat.deploy.serverUrl}</url>
+                    <username>superuser</username>
+                    <password>superuser</password>
+                    <path>${warPackageName}</path>
+                    <charset>utf8</charset>
+                    <update>true</update>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

@@ -13,11 +13,8 @@ public class IndexController extends Controller {
 
     @ActionKey("/index")
     public void index() {
-        render("login.html");
+        renderJson("hello word");
     }
 
-    @ActionKey("/test")
-    public void test() {
 
-    }
 }

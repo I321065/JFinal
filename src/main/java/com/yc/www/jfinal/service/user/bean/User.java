@@ -1,4 +1,4 @@
-package com.yc.www.jfinal.model.entity;
+package com.yc.www.jfinal.service.user.bean;
 
 import com.jfinal.plugin.activerecord.Model;
 
@@ -8,26 +8,21 @@ import java.util.Date;
  * Created by Nick on 2017/3/5.
  */
 public class User extends Model<User> {
+
     public static final User dao = new User().dao();
 
     private int userId;
-    private String nickName;
+    private String userName;
     private String passWord;
-    private String phoneNumber;
 
     private Date createDate;
-    private Date endDate;
+    private Date updateDate;
 
     public User() {}
 
-    public User(String nickName, String passWord) {
-        this(nickName, passWord, null);
-    }
-
-    public User(String nickName, String passWord, String phoneNumber) {
-        this.nickName = nickName;
+    public User(String userName, String passWord) {
+        this.userName = userName;
         this.passWord = passWord;
-        this.phoneNumber = phoneNumber;
     }
 
     public int getUserId() {
@@ -38,12 +33,12 @@ public class User extends Model<User> {
         this.userId = userId;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassWord() {
@@ -54,13 +49,6 @@ public class User extends Model<User> {
         this.passWord = passWord;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
 
     public Date getCreateDate() {
         return createDate;
@@ -70,11 +58,12 @@ public class User extends Model<User> {
         this.createDate = createDate;
     }
 
-    public Date getEffectiveDate() {
-        return endDate;
+    public Date getUpdateDate() {
+        return updateDate;
     }
 
-    public void setEffectiveDate(Date endDate) {
-        this.endDate = endDate;
+    public void setUpdateDate(Date updateDate) {
+        this.updateDate = updateDate;
     }
+
 }

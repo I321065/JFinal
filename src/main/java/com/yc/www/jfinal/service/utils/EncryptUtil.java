@@ -1,60 +1,42 @@
 package com.yc.www.jfinal.service.utils;
 
-import java.io.UnsupportedEncodingException;
+import com.jfinal.log.Log;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.util.EmptyStackException;
 
 /**
- * Created by Nick on 2017/3/11.
+ * Created by superuser on 9/7/17.
  */
 public class EncryptUtil {
-    private static final String MD_5 = "MD5";
-    private static final String SHA = "SHA";
+    private static Logger logger = LogManager.getLogger(EncryptUtil.class);
 
-    public static String md5Encode(String info) {
-        MessageDigest md5 = null;
-        StringBuffer sb = null;
-        try {
-            md5 = MessageDigest.getInstance(MD_5);
-            byte[] bytes = info.getBytes("UTF-8");
-            byte[] md5Bytes = md5.digest(bytes);
-            sb = new StringBuffer();
-            for(int i=0; i<md5Bytes.length; i++) {
-                int val = ((int)md5Bytes[i]) & 0xff;
-                if(val < 16) {
-                    sb.append("0");
-                }
-                sb.append(Integer.toHexString(val));
-            }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+    public static String sha1(String str) {
+        if(str == null || str.length() == 0) {
+            return null;
         }
-        return sb.toString();
-    }
 
-
-    public static String shaEncode(String info) {
-        MessageDigest sha = null;
-        StringBuffer sb = null;
+        char hexDigits[] = {'0','1','2','3','4','5','6','7','8','9',
+                'a','b','c','d','e','f'};
         try {
-            sha = MessageDigest.getInstance(SHA);
-            byte[] bytes = info.getBytes("UTF-8");
-            byte[] shaBytes = sha.digest(bytes);
-            sb = new StringBuffer();
-            for(int i=0; i<shaBytes.length; i++) {
-                int val = ((int)shaBytes[i]) & 0xff;
-                if(val < 16) {
-                    sb.append("0");
-                }
-                sb.append(Integer.toHexString(val));
+            MessageDigest mdTemp = MessageDigest.getInstance("SHA1");
+            mdTemp.update(str.getBytes("UTF-8"));
+
+            byte[] md = mdTemp.digest();
+            int j = md.length;
+            char buf[] = new char[j*2];
+            int k = 0;
+            for (int i = 0; i < j; i++) {
+                byte byte0 = md[i];
+                buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                buf[k++] = hexDigits[byte0 & 0xf];
             }
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            return new String(buf);
+        } catch (Exception e) {
+            logger.error("catch some exception when using SHA1 to encrypt");
+            return null;
         }
-        return sb.toString();
     }
 }
