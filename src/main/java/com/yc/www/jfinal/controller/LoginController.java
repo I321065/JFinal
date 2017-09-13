@@ -5,6 +5,8 @@ import com.jfinal.core.Controller;
 import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.user.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -14,33 +16,29 @@ import java.util.Map;
  */
 
 public class LoginController extends Controller{
+    Logger logger = LogManager.getLogger(LoginController.class);
     private UserService userService = new UserService();
 
     @ActionKey("/login")
     public void login() {
         String userName = getPara(Constants.USER_NAME);
         String pwd = getPara(Constants.PASS_WORD);
-
-        User user = userService.getUserByName(userName, pwd);
-        if(user == null) {
-            renderJson("you have not register");
+        User user = userService.getLoginUser(userName, pwd);
+        if(user != null) {
+            HttpSession session = createSession(user);
+            renderJson("login success, session=" + session.toString());
+        }else {
+            renderJson("you have not register");render();
         }
-
-        HttpSession session = getSession(true);
-        session.setAttribute("user", user);
-
-
-
+        createToken();
     }
 
 
-    private HttpSession createSession(Map<String, Object> messages) {
+    private HttpSession createSession(User user) {
         HttpSession session = getSession(true);
         if(session.isNew()) {
             session.setMaxInactiveInterval(30*60);//30 minutes
-            for(Map.Entry<String, Object> entry : messages.entrySet()) {
-                session.setAttribute(entry.getKey(), entry.getValue());
-            }
+            session.setAttribute("user", user);
         }
         return session;
     }

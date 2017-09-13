@@ -1,4 +1,4 @@
-package com.yc.www.jfinal.service.user;
+package com.yc.www.jfinal.service.table;
 
 /**
  * Created by superuser on 9/7/17.

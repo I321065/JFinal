@@ -37,7 +37,7 @@ public class User extends Model<User> {
         return userName;
     }
 
-    public void setNickName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -48,7 +48,6 @@ public class User extends Model<User> {
     public void setPassWord(String passWord) {
         this.passWord = passWord;
     }
-
 
     public Date getCreateDate() {
         return createDate;
@@ -65,5 +64,4 @@ public class User extends Model<User> {
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
-
 }
