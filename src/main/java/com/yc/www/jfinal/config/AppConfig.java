@@ -51,8 +51,8 @@ public class AppConfig extends JFinalConfig {
         //arp.addMapping("traveller", "tlrId", Traveller.class);
         plugins.add(arp);
 
-        ShiroPlugin shiroPlugin = new ShiroPlugin(routes);
-        plugins.add(shiroPlugin);
+        //ShiroPlugin shiroPlugin = new ShiroPlugin(routes);
+        //plugins.add(shiroPlugin);
 
     }
 

@@ -21,14 +21,14 @@ public class RegisterController extends Controller {
     @ActionKey("/register")
     public void register() {
         String userName = getPara("userName");
-        User user = service.getUserByName(userName);
-        if(user != null) {
-            logger.info("The userName has been registered, please change it, userName=" + userName);
-            return;
-        }
-        String pwd = EncryptUtil.sha1(getPara("pwd"));
+        String pwd = getPara("pwd");
         if(StringUtils.isBlank(userName) || StringUtils.isBlank(pwd)) {
             renderJson("the userName and password can be null");
+            return;
+        }
+        User user = service.getUserByName(userName);
+        if(user != null) {
+            renderJson("The userName has been registered, please change it, userName=" + userName);
             return;
         }
         user = new User(userName, pwd);

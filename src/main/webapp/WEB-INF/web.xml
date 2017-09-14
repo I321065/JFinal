@@ -34,7 +34,7 @@
     </filter-mapping>
 
     <!--shiro framework-->
-    <listener>
+    <!--<listener>
         <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
     </listener>
     <filter>
@@ -48,7 +48,7 @@
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+    </filter-mapping>-->
 
     <!--jfinal-->
     <filter>

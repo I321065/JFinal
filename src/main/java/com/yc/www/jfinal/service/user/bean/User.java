@@ -14,6 +14,7 @@ public class User extends Model<User> {
     private int userId;
     private String userName;
     private String passWord;
+    private String salt;
 
     private Date createDate;
     private Date updateDate;
@@ -47,6 +48,14 @@ public class User extends Model<User> {
 
     public void setPassWord(String passWord) {
         this.passWord = passWord;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public Date getCreateDate() {
