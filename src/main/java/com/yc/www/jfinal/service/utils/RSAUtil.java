@@ -12,7 +12,9 @@ import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.crypto.Cipher;
@@ -87,10 +89,11 @@ public class RSAUtil {
     }
 
 
-    public static Map<String, String> createLoginKeyPair() throws Exception {
-        Map<String, String> loginKeyPair = new HashMap<String, String>(1);
+    public static List<String> createLoginKeyPair() throws Exception {
+        List loginKeyPair = new ArrayList<String>(2);
         Map<String, Object> keyPair = genKeyPair();
-        loginKeyPair.put(getPublicKey(keyPair), getPrivateKey(keyPair));
+        loginKeyPair.add(getPublicKey(keyPair));
+        loginKeyPair.add(getPrivateKey(keyPair));
         return loginKeyPair;
     }
 
@@ -330,14 +333,14 @@ public class RSAUtil {
 
     public static void main(String[] args) throws Exception {
         String temp = "admin";
-        Map<String, String> pair = createLoginKeyPair();
-        System.out.println(pair.keySet().iterator().next());
+
+        /*System.out.println(pair.keySet().iterator().next());
         String publickey = pair.keySet().iterator().next();
 
         String aa = Base64Util.encodeByte(encryptByPublicKey(temp.getBytes(), publickey));
 
 
-        System.out.println(aa);
+        System.out.println(aa);*/
 
         //byte[] bytes = Base64Util.decodeString(aa);
 

@@ -21,7 +21,7 @@ public class RegisterController extends Controller {
     @ActionKey("/register")
     public void register() {
         String userName = getPara("userName");
-        String pwd = getPara("pwd");
+        String pwd = getPara("passWord");
         if(StringUtils.isBlank(userName) || StringUtils.isBlank(pwd)) {
             renderJson("the userName and password can be null");
             return;

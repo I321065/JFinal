@@ -5,12 +5,15 @@ import com.jfinal.core.Controller;
 import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.user.UserService;
+import com.yc.www.jfinal.service.user.bean.vo.UserVO;
+import com.yc.www.jfinal.service.utils.JedisUtil;
 import com.yc.www.jfinal.service.utils.RSAUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,42 +22,43 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public class LoginController extends Controller{
-    Logger logger = LogManager.getLogger(LoginController.class);
+    Logger logger = LogManager.getLogger("LoginController");
     private UserService userService = new UserService();
+
+
 
     private static Map<String, String> keyPairs = Collections.synchronizedMap(new HashMap<String, String>());
 
-    @ActionKey("getPublicKey")
+    @ActionKey("/getPublicKey")
     public void getPublickey() {
         try {
-            Map<String, String> loginKeyPair = RSAUtil.createLoginKeyPair();
-            keyPairs.putAll(loginKeyPair);
-            String publicKey = loginKeyPair.keySet().iterator().next();
-            renderJson(publicKey, keyPairs);
+            List<String> loginKeyPair = RSAUtil.createLoginKeyPair();
+            if(loginKeyPair == null || loginKeyPair.size() != 2) {
+                renderJson("failed to create public key");
+                return;
+            }
+            String publicKey = loginKeyPair.get(0);
+            String privateKey = loginKeyPair.get(1);
+            JedisUtil.set(publicKey, privateKey);
+            renderJson(publicKey);
             return;
         } catch (Exception e) {
             e.printStackTrace();
+            renderJson("failed to create public key");
         }
-        renderJson("failed to create public key");
     }
 
 
     @ActionKey("/login")
     public void login() {
         String publicKey = getPara("publicKey");
-        String privateKey = keyPairs.get(getPara("publicKey"));
-        logger.info(privateKey);
-        renderJson(privateKey);
-        return;
-        /*keyPairs.remove(publicKey);
-        String userName = getPara(Constants.USER_NAME);
-        String pwd = getPara(Constants.PASS_WORD);
-        User user = userService.getLoginUser(userName, pwd, privateKey);
-        if(user != null) {
-            renderJson("login success");
-        }else {
-            renderJson("you have not register");
-        }*/
+        String uName = getPara("userName");
+        String pwd = getPara("passWord");
+        String privateKey = JedisUtil.getStringValue(publicKey);
+        User user = userService.getLoginUser(uName, pwd, privateKey);
+        UserVO uVO = new UserVO();
+        uVO.setUserName(user.getUserName());
+        renderJson(uVO);
     }
 
 

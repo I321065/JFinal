@@ -8,15 +8,22 @@ softwares:
 framework:JFinal
 
 API:
-  root: host:8080/ironman
+  rootPath: host:8080/ironman
 
-  login : root/login
-     args:[userName  pwd]
+  locate to login page: {rootPath}/login
+     args:{
+        userName:xxx,
+        passWord:xxx,
+        publicKey:xxx
+     }
   
-  index: root/index
+  locate the index page: {rootPath}/index
   
-  create a new user: root/register 
-      args:[userName pwd]
+  create a new user: {rootPath}/register 
+    args:{
+       userName:xxx,
+       passWord:xxx
+    }
      
 
 
