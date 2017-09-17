@@ -2,6 +2,7 @@ package com.yc.www.jfinal.controller;
 
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
+import com.yc.www.jfinal.service.result.json.Result;
 import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.user.UserService;
@@ -40,7 +41,8 @@ public class LoginController extends Controller{
             String publicKey = loginKeyPair.get(0);
             String privateKey = loginKeyPair.get(1);
             JedisUtil.set(publicKey, privateKey);
-            renderJson(publicKey);
+            Result result = new Result(publicKey, 0, null);
+            renderJson(result);
             return;
         } catch (Exception e) {
             e.printStackTrace();
@@ -58,7 +60,7 @@ public class LoginController extends Controller{
         User user = userService.getLoginUser(uName, pwd, privateKey);
         UserVO uVO = new UserVO();
         uVO.setUserName(user.getUserName());
-        renderJson(uVO);
+        renderJson(new Result(uVO));
     }
 
 

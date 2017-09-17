@@ -24,6 +24,29 @@ API:
        userName:xxx,
        passWord:xxx
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+  
+  data returned format:
+    {
+       data:{
+          xxxx;
+          xxxx;
+          ....      
+       },
+       
+       errorNum:0,
+       
+       errorMsg:""
+         
+    }
      
 
 
