@@ -13,7 +13,7 @@ public class User extends Model<User> {
 
     private int userId;
     private String userName;
-    private String passWord;
+    private String password;
     private String salt;
 
     private Date createDate;
@@ -23,7 +23,7 @@ public class User extends Model<User> {
 
     public User(String userName, String passWord) {
         this.userName = userName;
-        this.passWord = passWord;
+        this.password = passWord;
     }
 
     public int getUserId() {
@@ -42,12 +42,12 @@ public class User extends Model<User> {
         this.userName = userName;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getSalt() {

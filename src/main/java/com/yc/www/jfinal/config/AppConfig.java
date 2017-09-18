@@ -31,6 +31,7 @@ public class AppConfig extends JFinalConfig {
         routes.add("/register", RegisterController.class, "/");
         routes.add("/login", LoginController.class, "/");
         routes.add("/test",TestSessionController.class, "/");
+        routes.add("/edit",EditorController.class, "/");
     }
 
     public void configEngine(Engine engine) {

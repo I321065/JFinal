@@ -4,6 +4,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.yc.www.jfinal.service.interceptor.SessionInterceptor;
+import com.yc.www.jfinal.service.user.bean.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,7 @@ import org.apache.logging.log4j.Logger;
  */
 public class IndexController extends Controller {
     Logger logger = LogManager.getLogger(IndexController.class);
+    private User user;
 
     @ActionKey("/index")
     @Before(SessionInterceptor.class)

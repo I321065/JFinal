@@ -16,6 +16,15 @@ API:
         passWord:xxx,
         publicKey:xxx
      }
+     
+     return:{
+        data:{
+           userName:xxx
+           token:xxx      
+        }
+        errorNum:xxx
+        errorMsg:xxx
+     }
   
   locate the index page: {rootPath}/index
   
