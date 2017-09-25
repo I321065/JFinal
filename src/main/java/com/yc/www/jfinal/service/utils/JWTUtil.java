@@ -1,8 +1,6 @@
 package com.yc.www.jfinal.service.utils;
 
-import com.alibaba.fastjson.JSONObject;
 import com.yc.www.jfinal.service.common.Constants;
-import com.yc.www.jfinal.service.user.bean.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;

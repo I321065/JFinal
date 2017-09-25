@@ -2,7 +2,6 @@ package com.yc.www.jfinal.config;
 
 import com.jfinal.config.*;
 import com.jfinal.ext.handler.ContextPathHandler;
-import com.jfinal.ext.plugin.shiro.ShiroPlugin;
 import com.jfinal.kit.PathKit;
 import com.jfinal.kit.Prop;
 import com.jfinal.kit.PropKit;
@@ -11,6 +10,8 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.template.Engine;
 import com.yc.www.jfinal.controller.*;
+import com.yc.www.jfinal.service.article.bean.Article;
+import com.yc.www.jfinal.service.article.bean.Comment;
 import com.yc.www.jfinal.service.user.bean.User;
 
 /**
@@ -30,8 +31,7 @@ public class AppConfig extends JFinalConfig {
         routes.add("/", IndexController.class, "/");
         routes.add("/register", RegisterController.class, "/");
         routes.add("/login", LoginController.class, "/");
-        routes.add("/test",TestSessionController.class, "/");
-        routes.add("/edit",EditorController.class, "/");
+        routes.add("/article",ArticleController.class, "/");
     }
 
     public void configEngine(Engine engine) {
@@ -47,14 +47,16 @@ public class AppConfig extends JFinalConfig {
         arp.setBaseSqlTemplatePath(PathKit.getRootClassPath());
         //arp.addSqlTemplate("sql_template/user.sql");
         arp.setDialect(new MysqlDialect());
+
         //add the mapping between entity and table in sql
-        arp.addMapping("user", "USER_ID", User.class);
-        //arp.addMapping("traveller", "tlrId", Traveller.class);
+        arp.addMapping("user", "userId", User.class);
+        arp.addMapping("article", "articleId", Article.class);
+        arp.addMapping("comment", "commentId", Comment.class);
+
         plugins.add(arp);
 
         //ShiroPlugin shiroPlugin = new ShiroPlugin(routes);
         //plugins.add(shiroPlugin);
-
     }
 
     public void configInterceptor(Interceptors interceptors) {

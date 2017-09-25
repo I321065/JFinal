@@ -17,7 +17,7 @@ import java.util.Date;
  * Created by Nick on 2017/3/5.
  */
 public class UserService {
-    Logger log  = LogManager.getLogger(UserService.class);
+    private static final Logger log  = LogManager.getLogger(UserService.class);
 
     public User getLoginUser(String userName, String password, String privateKey) {
         try {
@@ -66,15 +66,14 @@ public class UserService {
 
     public void saveUser(User user) {
         User userDB = new User();
-        userDB.set("userName", user.getUserName());
+        userDB.setUserName(user.getUserName());
         String salt = MD5Util.generateSalt();
-        userDB.set("salt", salt);
-        userDB.set("password", MD5Util.generate(user.getPassword(), salt));
-        userDB.set("createDate", new Date());
-        userDB.set("updateDate", new Date());
-        userDB.save();
+        userDB.setSalt(salt);
+        userDB.setPassword(MD5Util.generate(user.getPassword(), salt));
+        userDB.setCreateDate(new Date());
+        userDB.setUpdateDate(new Date());
+        SaveToDBUtil.saveModel(user);
     }
-
 
     /**
      * 生成subject信息

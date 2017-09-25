@@ -1,13 +1,13 @@
 package com.yc.www.jfinal.service.user.bean;
 
-import com.jfinal.plugin.activerecord.Model;
+import com.yc.www.jfinal.service.common.Entity;
 
 import java.util.Date;
 
 /**
  * Created by Nick on 2017/3/5.
  */
-public class User extends Model<User> {
+public class User extends Entity<User> {
 
     public static final User dao = new User().dao();
 

@@ -26,8 +26,6 @@ public class LoginController extends Controller{
     Logger logger = LogManager.getLogger("LoginController");
     private UserService userService = new UserService();
 
-
-
     private static Map<String, String> keyPairs = Collections.synchronizedMap(new HashMap<String, String>());
 
     @ActionKey("/getPublicKey")
@@ -45,7 +43,7 @@ public class LoginController extends Controller{
             renderJson(result);
             return;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("catch exception", e);
             renderJson("failed to create public key");
         }
     }
@@ -68,12 +66,4 @@ public class LoginController extends Controller{
         renderJson(new Result(uVO));
     }
 
-
-    private HttpSession createUserSession(HttpSession session, User user) {
-        if(session.isNew()) {
-            session.setMaxInactiveInterval(30*60);//30 minutes
-            session.setAttribute("user", user);
-        }
-        return session;
-    }
 }
