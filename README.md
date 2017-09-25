@@ -35,6 +35,23 @@ API:
     }
     
     
+  create a new article: {rootPath}/article/save 
+     args:{
+         title:xxx,
+         content:xxx
+     }
+      
+  list all articles: {rootPath}/article/list 
+     args:{
+        
+     }
+     
+  list all articles that the argument is user's userId: {rootPath}/article/list 
+     args:{
+        articleUserId:xxx
+     }
+    
+    
     
     
     

@@ -14,7 +14,7 @@ public class Entity<T extends Model> extends Model<T> {
     Logger log = LogManager.getLogger(Entity.class);
 
     public String[] getFieldNames() {
-        Field[] fields = this.getClass().getFields();
+        Field[] fields = this.getClass().getDeclaredFields();
         String[] names = new String[fields.length];
         for (int i = 0; i < fields.length; i++) {
             names[i] = fields[i].getName();
@@ -24,7 +24,9 @@ public class Entity<T extends Model> extends Model<T> {
 
     public Object getFieldValue(String name) {
         try {
-            return this.getClass().getField(name).get(this);
+            Field f = getClass().getDeclaredField(name);
+            f.setAccessible(true);
+            return f.get(this);
         } catch (NoSuchFieldException nsfe) {
             log.error("Error occurred: ", nsfe);
         } catch (IllegalAccessException iae) {

@@ -10,7 +10,7 @@ import java.util.Date;
  */
 public class Article extends Entity<Article> {
 
-    private static final Article dao = new Article().dao();
+    public static final Article dao = new Article().dao();
 
     private int articleId;
 
@@ -22,7 +22,7 @@ public class Article extends Entity<Article> {
 
     private Date createDate;
 
-    private Date UpdateDate;
+    private Date updateDate;
 
     public int getArticleId() {
         return articleId;
@@ -65,10 +65,10 @@ public class Article extends Entity<Article> {
     }
 
     public Date getUpdateDate() {
-        return UpdateDate;
+        return updateDate;
     }
 
     public void setUpdateDate(Date updateDate) {
-        UpdateDate = updateDate;
+        this.updateDate = updateDate;
     }
 }

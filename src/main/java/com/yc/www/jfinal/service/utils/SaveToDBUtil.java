@@ -4,6 +4,7 @@ import com.yc.www.jfinal.service.common.Entity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 
 /**
@@ -15,10 +16,14 @@ public class SaveToDBUtil {
 
     public static <T extends Entity<T>> T saveModel(T t) {
         String[] fields = t.getFieldNames();
+        Class<?> clazz = t.getClass();
         T saveBean = null;
-        for(String field : fields) {
-            try {
-                saveBean = (T) t.getClass().newInstance();
+        try {
+            saveBean = (T) clazz.newInstance();
+            for(String field : fields) {
+                if(clazz.getDeclaredField(field).getModifiers() == 25) {
+                    continue;
+                }
                 Object value = t.getFieldValue(field);
                 if(value == null) {
                     continue;
@@ -30,13 +35,15 @@ public class SaveToDBUtil {
                 }else if(value instanceof Integer) {
                     saveBean.set(field,(Integer)value);
                 }
-                t.save();
-                return saveBean;
-            } catch (InstantiationException e) {
-                log.error("catch exception...", e);
-            } catch (IllegalAccessException e) {
-                log.error("catch exception...", e);
             }
+            saveBean.save();
+            return saveBean;
+        } catch (InstantiationException e) {
+            log.error("catch exception...", e);
+        } catch (IllegalAccessException e) {
+            log.error("catch exception...", e);
+        } catch (NoSuchFieldException e) {
+            log.error("catch exception...", e);
         }
         return null;
     }

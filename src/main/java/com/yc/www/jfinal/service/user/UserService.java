@@ -52,6 +52,15 @@ public class UserService {
         return user;
     }
 
+    public String getUserNameById(int userId) {
+        String sql = "select userName from user where userId=" + userId + ";";
+        User user = User.dao.findFirst(sql);
+        if(user != null) {
+            return user.getStr("userName");
+        }
+        return null;
+    }
+
     public User getUserByUserIdAndUserName(int userId, String userName) {
         String sql = "select userId, userName from user where userId = " + userId + " AND userName='" + userName + "';";
         log.info("get user by name and userId sql= " + sql);
