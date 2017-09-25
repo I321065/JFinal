@@ -9,6 +9,8 @@ import java.util.Date;
  */
 public class Comment extends Entity<Comment> {
 
+    public static final Comment dao = new Comment().dao();
+
     private int commentId;
 
     private int articleId;

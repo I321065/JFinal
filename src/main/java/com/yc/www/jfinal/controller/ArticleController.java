@@ -5,6 +5,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Record;
 import com.yc.www.jfinal.service.article.ArticleService;
+import com.yc.www.jfinal.service.article.CommentService;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
 import com.yc.www.jfinal.service.result.json.Result;
@@ -18,6 +19,8 @@ import java.util.List;
 public class ArticleController extends Controller {
 
     ArticleService articleService = new ArticleService();
+
+    CommentService commentService = new CommentService();
 
     @ActionKey("/article/save")
     @Before(UserTokenInterceptor.class)

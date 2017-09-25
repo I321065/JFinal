@@ -10,6 +10,8 @@ import java.util.Date;
  */
 public class Article extends Entity<Article> {
 
+    private static final Article dao = new Article().dao();
+
     private int articleId;
 
     private String articleTitle;
