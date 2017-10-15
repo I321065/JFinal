@@ -5,7 +5,6 @@ import com.jfinal.plugin.activerecord.Record;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.user.UserService;
-import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.utils.SaveToDBUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
