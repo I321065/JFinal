@@ -1,6 +1,5 @@
 package com.yc.www.jfinal.service.article.bean;
 
-import com.jfinal.plugin.activerecord.Model;
 import com.yc.www.jfinal.service.common.Entity;
 
 import java.util.Date;
