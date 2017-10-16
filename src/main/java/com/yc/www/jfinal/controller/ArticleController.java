@@ -38,7 +38,6 @@ public class ArticleController extends Controller {
             ArticleRequestObject articleRequestObject = ParseRequest.getObjectFromRequest(ArticleRequestObject.class, this);
             String articleTitle = BeanUtils.getProperty(articleRequestObject, "title");
             String articleContent = BeanUtils.getProperty(articleRequestObject, "content");
-
             if(StringUtils.isBlank(articleTitle) || StringUtils.isBlank(articleContent)) {
                 renderJson("title or content can not be null");
                 return;
@@ -61,7 +60,6 @@ public class ArticleController extends Controller {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-
     }
 
     @ActionKey("/article/update")
