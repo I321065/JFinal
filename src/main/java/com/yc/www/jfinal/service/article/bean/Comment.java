@@ -11,7 +11,7 @@ public class Comment extends Entity<Comment> {
 
     public static final Comment dao = new Comment().dao();
 
-    private int commentId;
+    private long commentId;
 
     private int articleId;
 
@@ -25,11 +25,11 @@ public class Comment extends Entity<Comment> {
 
     private Date updateDate;
 
-    public int getCommentId() {
+    public long getCommentId() {
         return commentId;
     }
 
-    public void setCommentId(int commentId) {
+    public void setCommentId(long commentId) {
         this.commentId = commentId;
     }
 

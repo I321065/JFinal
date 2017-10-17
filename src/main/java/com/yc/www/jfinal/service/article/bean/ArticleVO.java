@@ -5,11 +5,21 @@ package com.yc.www.jfinal.service.article.bean;
  */
 public class ArticleVO {
 
+    private int articleId;
+
     private String title;
 
     private String content;
 
     private String userName;
+
+    public int getArticleId() {
+        return articleId;
+    }
+
+    public void setArticleId(int articleId) {
+        this.articleId = articleId;
+    }
 
     public String getTitle() {
         return title;

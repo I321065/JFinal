@@ -4,7 +4,6 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.yc.www.jfinal.service.user.UserService;
 import com.yc.www.jfinal.service.user.bean.User;
-import com.yc.www.jfinal.service.utils.EncryptUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,13 +34,5 @@ public class RegisterController extends Controller {
         service.saveUser(user);
         renderJson(user);
     }
-
-
-
-
-
-
-
-
 
 }

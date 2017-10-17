@@ -8,11 +8,14 @@ import com.yc.www.jfinal.service.article.ArticleService;
 import com.yc.www.jfinal.service.article.CommentService;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
+import com.yc.www.jfinal.service.article.bean.Comment;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
 import com.yc.www.jfinal.service.result.json.Result;
 import com.yc.www.jfinal.service.utils.ParseRequest;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -22,6 +25,8 @@ import java.util.List;
  * Created by superuser on 9/18/17.
  */
 public class ArticleController extends Controller {
+
+    Logger log = LogManager.getLogger(ArticleController.class);
 
     ArticleService articleService = new ArticleService();
 
@@ -52,13 +57,13 @@ public class ArticleController extends Controller {
             }
             renderJson(result);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("catch exception", e);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            log.error("catch exception", e);
         } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            log.error("catch exception", e);
         } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            log.error("catch exception", e);
         }
     }
 
@@ -81,4 +86,26 @@ public class ArticleController extends Controller {
         }
         renderJson(new Result(articleVOs));
     }
+
+    @ActionKey("/article/comment")
+    public void comment() {
+        int articleId = 1;
+        int userId = 1;
+        String commentDetail = "";
+        int commentOverall = 1;
+
+        Comment comment = new Comment();
+        comment.setArticleId(articleId);
+        comment.setCommentUserId(userId);
+        comment.setCommentDetail(commentDetail);
+        comment.setCommentOverall(commentOverall);
+        Comment saveBean = commentService.save(comment);
+
+        renderJson("jfljaldfjjsdfjalsjdfl");
+
+
+    }
+
+
+
 }
