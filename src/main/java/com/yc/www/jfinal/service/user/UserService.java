@@ -2,7 +2,6 @@ package com.yc.www.jfinal.service.user;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yc.www.jfinal.service.common.Constants;
-import com.yc.www.jfinal.service.table.Columns;
 import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.utils.*;
 import io.jsonwebtoken.Claims;

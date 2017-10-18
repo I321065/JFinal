@@ -26,8 +26,8 @@ public class ArticleService {
 
     public static final Article dao = new Article().dao();
 
-    //private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
-    private static String rootPath = "/apps/ironman/articles"; //production
+    private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
+    //private static String rootPath = "/apps/ironman/articles"; //production
 
     public Article createArticle(String title, String content, int userId) {
         if(StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
@@ -159,5 +159,51 @@ public class ArticleService {
             }
         }
         return null;
+    }
+
+    public boolean deleteArticleById(int articleId) {
+        log.info("delete the article by id...");
+        if(articleId < 0) {
+            log.error("the article id of deleting is not right, id = " + articleId);
+            return false;
+        }
+        String location = getArticleLocationByArticleId(articleId);
+
+        if(StringUtils.isBlank(location)) {
+            log.info("get the article location is null, article=" + articleId);
+            return false;
+        }
+
+        //delete from datbbase
+        boolean isDeleteFromDB = dao.deleteById(articleId);
+
+        //delete from disk
+        boolean isDeleteFromDisk = deleteArticleFromDisk(location);
+
+        return isDeleteFromDB && isDeleteFromDisk;
+    }
+
+    private String getArticleLocationByArticleId(int articleId) {
+        String sql = "select articleLocation from article where articleId=" + articleId;
+        Article article = dao.findFirst(sql);
+        String location = null;
+        if(article != null) {
+            location = article.getStr("articleLocation");
+        }
+        return location;
+    }
+
+    private boolean deleteArticleFromDisk(String filePath) {
+        if(StringUtils.isBlank(filePath)) {
+            log.info("the file path is null");
+            return false;
+        }
+        File file = new File(filePath);
+        if(file.isDirectory()) {
+            log.error("the article file path is not right, it is directory not file");
+            return false;
+        }
+
+        return file.delete();
     }
 }
