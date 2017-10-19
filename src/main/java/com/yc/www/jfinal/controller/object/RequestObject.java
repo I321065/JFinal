@@ -1,4 +1,4 @@
-package com.yc.www.jfinal.controller.request.object;
+package com.yc.www.jfinal.controller.object;
 
 /**
  * Created by I321065 on 10/19/2017.
@@ -12,9 +12,9 @@ public class RequestObject {
     public String title;
     public String content;
 
-    public int articleId;
+    public long articleId;
 
-    public int userId;
+    public long userId;
     public int commentOverall;
     public String commentDetail;
 
@@ -58,19 +58,19 @@ public class RequestObject {
         this.content = content;
     }
 
-    public int getArticleId() {
+    public long getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(int articleId) {
+    public void setArticleId(long articleId) {
         this.articleId = articleId;
     }
 
-    public int getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 

@@ -33,14 +33,14 @@ public class UserService {
             String passWord = MD5Util.generate(password, salt);
             log.info("get the user password" + passWord);
             if(passWord.equals(pwdDB)) {
-                user.setUserId(user.getInt("userId"));
+                user.setUserId(user.getLong("userId"));
                 user.setUserName(userName);
                 return user;
             }else {
                 log.info("password is wrong");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("catch exception", e);
         }
         return null;
     }
@@ -51,7 +51,7 @@ public class UserService {
         return user;
     }
 
-    public String getUserNameById(int userId) {
+    public String getUserNameById(long userId) {
         String sql = "select userName from user where userId=" + userId + ";";
         User user = User.dao.findFirst(sql);
         if(user != null) {
@@ -60,12 +60,12 @@ public class UserService {
         return null;
     }
 
-    public User getUserByUserIdAndUserName(int userId, String userName) {
+    public User getUserByUserIdAndUserName(long userId, String userName) {
         String sql = "select userId, userName from user where userId = " + userId + " AND userName='" + userName + "';";
         log.info("get user by name and userId sql= " + sql);
         User user = User.dao.findFirst(sql);
         if(user != null) {
-            user.setUserId(user.getInt("userId"));
+            user.setUserId(user.getLong("userId"));
             user.setUserName(user.getStr("userName"));
         }
         log.info("get user by name and userId " + user);

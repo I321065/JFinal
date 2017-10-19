@@ -11,23 +11,23 @@ public class Article extends Entity<Article> {
 
     public static final Article dao = new Article().dao();
 
-    private int articleId;
+    private long articleId;
 
     private String articleTitle;
 
     private String articleLocation;
 
-    private int articleUserId;
+    private long articleUserId;
 
     private Date createDate;
 
     private Date updateDate;
 
-    public int getArticleId() {
+    public long getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(int articleId) {
+    public void setArticleId(long articleId) {
         this.articleId = articleId;
     }
 
@@ -47,11 +47,11 @@ public class Article extends Entity<Article> {
         this.articleLocation = articleLocation;
     }
 
-    public int getArticleUserId() {
+    public long getArticleUserId() {
         return articleUserId;
     }
 
-    public void setArticleUserId(int articleUserId) {
+    public void setArticleUserId(long articleUserId) {
         this.articleUserId = articleUserId;
     }
 

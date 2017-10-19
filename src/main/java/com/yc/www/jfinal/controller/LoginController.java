@@ -2,7 +2,8 @@ package com.yc.www.jfinal.controller;
 
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.yc.www.jfinal.controller.request.object.LoginRequestObject;
+
+import com.yc.www.jfinal.controller.object.*;
 import com.yc.www.jfinal.service.result.json.Result;
 import com.yc.www.jfinal.service.user.UserService;
 import com.yc.www.jfinal.service.user.bean.User;
@@ -11,7 +12,6 @@ import com.yc.www.jfinal.service.utils.Base64Util;
 import com.yc.www.jfinal.service.utils.JedisUtil;
 import com.yc.www.jfinal.service.utils.ParseRequest;
 import com.yc.www.jfinal.service.utils.RSAUtil;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -54,7 +54,7 @@ public class LoginController extends Controller{
     @ActionKey("/login")
     public void login() throws Exception {
         //parse json request
-        LoginRequestObject loginRequestObject = ParseRequest.getObjectFromRequest(LoginRequestObject.class, this);
+        RequestObject loginRequestObject = ParseRequest.getObjectFromRequest(RequestObject.class, this);
         String publicKey = loginRequestObject.getPublicKey();
         String uName = loginRequestObject.getUserName();
         String password = loginRequestObject.getPassword();

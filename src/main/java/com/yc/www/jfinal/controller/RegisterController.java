@@ -13,7 +13,8 @@ import org.apache.logging.log4j.Logger;
  */
 
 public class RegisterController extends Controller {
-    Logger logger = LogManager.getLogger(RegisterController.class);
+
+    Logger log = LogManager.getLogger(RegisterController.class);
 
     UserService service = new UserService();
 

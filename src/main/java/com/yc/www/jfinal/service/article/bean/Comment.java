@@ -13,9 +13,9 @@ public class Comment extends Entity<Comment> {
 
     private long commentId;
 
-    private int articleId;
+    private long articleId;
 
-    private int commentUserId;
+    private long commentUserId;
 
     private String commentDetail;
 
@@ -33,19 +33,19 @@ public class Comment extends Entity<Comment> {
         this.commentId = commentId;
     }
 
-    public int getArticleId() {
+    public long getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(int articleId) {
+    public void setArticleId(long articleId) {
         this.articleId = articleId;
     }
 
-    public int getCommentUserId() {
+    public long getCommentUserId() {
         return commentUserId;
     }
 
-    public void setCommentUserId(int commentUserId) {
+    public void setCommentUserId(long commentUserId) {
         this.commentUserId = commentUserId;
     }
 

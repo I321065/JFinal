@@ -50,6 +50,19 @@ API:
      args:{
         articleUserId:xxx
      }
+     
+  delete a article:{rootPath}/article/delete
+      args:{
+         articleId:1
+      }
+      
+  add a comment for a article:{rootPath}/article/comment
+      args:{
+         articleId:1
+         userId:xxx  (I can get this value from seesion after we open the login function
+         commentOverall:[-1,0,1]                
+      }
+      
     
     
     

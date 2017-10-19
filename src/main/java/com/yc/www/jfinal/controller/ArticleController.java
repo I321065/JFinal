@@ -3,9 +3,8 @@ package com.yc.www.jfinal.controller;
 import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.yc.www.jfinal.controller.request.object.ArticleDeleteRequestObject;
-import com.yc.www.jfinal.controller.request.object.ArticleRequestObject;
-import com.yc.www.jfinal.controller.request.object.RequestObject;
+
+import com.yc.www.jfinal.controller.object.*;
 import com.yc.www.jfinal.service.article.ArticleService;
 import com.yc.www.jfinal.service.article.CommentService;
 import com.yc.www.jfinal.service.article.bean.Article;
@@ -14,13 +13,11 @@ import com.yc.www.jfinal.service.article.bean.Comment;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
 import com.yc.www.jfinal.service.result.json.Result;
 import com.yc.www.jfinal.service.utils.ParseRequest;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -42,9 +39,9 @@ public class ArticleController extends Controller {
         int userId = 1;
 
         try {
-            ArticleRequestObject articleRequestObject = ParseRequest.getObjectFromRequest(ArticleRequestObject.class, this);
-            String articleTitle = BeanUtils.getProperty(articleRequestObject, "title");
-            String articleContent = BeanUtils.getProperty(articleRequestObject, "content");
+            RequestObject articleRequestObject = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+            String articleTitle = articleRequestObject.getTitle();
+            String articleContent = articleRequestObject.getContent();
             if(StringUtils.isBlank(articleTitle) || StringUtils.isBlank(articleContent)) {
                 renderJson("title or content can not be null");
                 return;
@@ -61,12 +58,6 @@ public class ArticleController extends Controller {
             return;
         } catch (IOException e) {
             log.error("catch exception", e);
-        } catch (IllegalAccessException e) {
-            log.error("catch exception", e);
-        } catch (InvocationTargetException e) {
-            log.error("catch exception", e);
-        } catch (NoSuchMethodException e) {
-            log.error("catch exception", e);
         }
         renderJson(new Result("something wrong happened, please contact administrator"));
     }
@@ -81,8 +72,9 @@ public class ArticleController extends Controller {
     public void delete() {
         Result result = null;
         try {
-            ArticleDeleteRequestObject object = ParseRequest.getObjectFromRequest(ArticleDeleteRequestObject.class, this);
-            int articleId = object.getArticleId();
+            //ArticleDeleteRequestObject object = ParseRequest.getObjectFromRequest(ArticleDeleteRequestObject.class, this);
+            RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+            long articleId = object.getArticleId();
             boolean isSucceed = articleService.deleteArticleById(articleId);
             if(isSucceed) {
                 result = new Result(new ArticleDeleteRequestObject(articleId));

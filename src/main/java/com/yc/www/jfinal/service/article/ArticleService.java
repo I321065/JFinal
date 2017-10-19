@@ -28,8 +28,8 @@ public class ArticleService {
 
     public static final Article dao = new Article().dao();
 
-    private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
-    //private static String rootPath = "/apps/ironman/articles"; //production
+    //private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
+    private static String rootPath = "/apps/ironman/articles"; //production
     
     public Article createArticle(String title, String content, int userId) {
         if(StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
@@ -117,10 +117,10 @@ public class ArticleService {
 
         for(Record re : recoreds) {
             ArticleVO vo = new ArticleVO();
-            vo.setArticleId(re.getInt("articleId"));
+            vo.setArticleId(re.getLong("articleId"));
             vo.setTitle(re.getStr("articleTitle"));
             vo.setContent(getArticleContent(re.getStr("articleLocation")));
-            int articleUserId = re.getInt("articleUserId");
+            long articleUserId = re.getLong("articleUserId");
             vo.setUserName(userService.getUserNameById(articleUserId));
             articleVOs.add(vo);
         }
@@ -163,7 +163,7 @@ public class ArticleService {
         return null;
     }
 
-    public boolean deleteArticleById(int articleId) {
+    public boolean deleteArticleById(long articleId) {
         log.info("delete the article by id...");
         if(articleId < 0) {
             log.error("the article id of deleting is not right, id = " + articleId);
@@ -185,7 +185,7 @@ public class ArticleService {
         return isDeleteFromDB && isDeleteFromDisk;
     }
 
-    private String getArticleLocationByArticleId(int articleId) {
+    private String getArticleLocationByArticleId(long articleId) {
         String sql = "select articleLocation from article where articleId=" + articleId;
         Article article = dao.findFirst(sql);
         String location = null;

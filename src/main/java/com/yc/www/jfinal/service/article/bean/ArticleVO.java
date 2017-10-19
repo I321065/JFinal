@@ -5,7 +5,7 @@ package com.yc.www.jfinal.service.article.bean;
  */
 public class ArticleVO {
 
-    private int articleId;
+    private long articleId;
 
     private String title;
 
@@ -13,11 +13,11 @@ public class ArticleVO {
 
     private String userName;
 
-    public int getArticleId() {
+    public long getArticleId() {
         return articleId;
     }
 
-    public void setArticleId(int articleId) {
+    public void setArticleId(long articleId) {
         this.articleId = articleId;
     }
 
