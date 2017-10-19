@@ -55,9 +55,9 @@ public class LoginController extends Controller{
     public void login() throws Exception {
         //parse json request
         LoginRequestObject loginRequestObject = ParseRequest.getObjectFromRequest(LoginRequestObject.class, this);
-        String publicKey = BeanUtils.getProperty(loginRequestObject, "publicKey");
-        String uName = BeanUtils.getProperty(loginRequestObject, "userName");
-        String password = BeanUtils.getProperty(loginRequestObject, "password");
+        String publicKey = loginRequestObject.getPublicKey();
+        String uName = loginRequestObject.getUserName();
+        String password = loginRequestObject.getPassword();
 
         String privateKey = JedisUtil.getStringValue(publicKey);
         String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));

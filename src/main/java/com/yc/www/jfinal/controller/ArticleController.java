@@ -5,6 +5,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.yc.www.jfinal.controller.request.object.ArticleDeleteRequestObject;
 import com.yc.www.jfinal.controller.request.object.ArticleRequestObject;
+import com.yc.www.jfinal.controller.request.object.RequestObject;
 import com.yc.www.jfinal.service.article.ArticleService;
 import com.yc.www.jfinal.service.article.CommentService;
 import com.yc.www.jfinal.service.article.bean.Article;
@@ -110,21 +111,25 @@ public class ArticleController extends Controller {
     }
 
     @ActionKey("/article/comment")
+    //@Before(UserTokenInterceptor.class)
     public void comment() {
-        int articleId = 1;
+        /*int articleId = 1;
         int userId = 1;
         String commentDetail = "";
-        int commentOverall = 1;
+        int commentOverall = 1;*/
 
-        Comment comment = new Comment();
-        comment.setArticleId(articleId);
-        comment.setCommentUserId(userId);
-        comment.setCommentDetail(commentDetail);
-        comment.setCommentOverall(commentOverall);
-        Comment saveBean = commentService.save(comment);
-
+        try {
+            RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+            Comment comment = new Comment();
+            comment.setArticleId(object.getArticleId());
+            comment.setCommentUserId(object.getUserId());
+            comment.setCommentDetail(object.getCommentDetail());
+            comment.setCommentOverall(object.getCommentOverall());
+            Comment saveBean = commentService.save(comment);
+        } catch (IOException e) {
+            log.error("catch exceptio");
+        }
         renderJson("jfljaldfjjsdfjalsjdfl");
-
     }
 
 }

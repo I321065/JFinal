@@ -1,7 +1,9 @@
 package com.yc.www.jfinal.service.article;
 
+import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.user.UserService;
@@ -28,7 +30,7 @@ public class ArticleService {
 
     private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
     //private static String rootPath = "/apps/ironman/articles"; //production
-
+    
     public Article createArticle(String title, String content, int userId) {
         if(StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
             return null;
