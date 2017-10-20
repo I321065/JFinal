@@ -52,6 +52,10 @@ public class UserService {
     }
 
     public String getUserNameById(long userId) {
+        if(userId < 0) {
+            log.error("userId is not right, userId=" + userId);
+            return null;
+        }
         String sql = "select userName from user where userId=" + userId + ";";
         User user = User.dao.findFirst(sql);
         if(user != null) {

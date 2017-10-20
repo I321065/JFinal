@@ -1,9 +1,7 @@
 package com.yc.www.jfinal.service.article;
 
-import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.user.UserService;
@@ -53,7 +51,6 @@ public class ArticleService {
                 log.error("failed to create directory, path=" + dir.getAbsolutePath());
                 return null;
             }
-
         }
         String filePath = dirPath + title + "_" + new Date().getTime();
         File article = new File(filePath);
@@ -120,7 +117,7 @@ public class ArticleService {
             vo.setArticleId(re.getLong("articleId"));
             vo.setTitle(re.getStr("articleTitle"));
             vo.setContent(getArticleContent(re.getStr("articleLocation")));
-            long articleUserId = re.getLong("articleUserId");
+            Long articleUserId = re.getLong("articleUserId") == null ? -1 : re.getLong("articleUserId");
             vo.setUserName(userService.getUserNameById(articleUserId));
             articleVOs.add(vo);
         }
