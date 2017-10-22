@@ -13,6 +13,7 @@ public class RequestObject {
     public String content;
 
     public long articleId;
+    public String articleUserId;//article/list
 
     public long userId;
     public int commentOverall;
@@ -66,6 +67,14 @@ public class RequestObject {
         this.articleId = articleId;
     }
 
+    public String getArticleUserId() {
+        return articleUserId;
+    }
+
+    public void setArticleUserId(String articleUserId) {
+        this.articleUserId = articleUserId;
+    }
+
     public long getUserId() {
         return userId;
     }
@@ -89,4 +98,5 @@ public class RequestObject {
     public void setCommentDetail(String commentDetail) {
         this.commentDetail = commentDetail;
     }
+
 }

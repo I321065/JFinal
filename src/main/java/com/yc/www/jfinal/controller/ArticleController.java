@@ -93,13 +93,22 @@ public class ArticleController extends Controller {
     //@Before(UserTokenInterceptor.class)
     public void list() {
         List<ArticleVO> articleVOs = null;
-        String articleUserId = getPara("articleUserId");
-        if(!StringUtils.isBlank(articleUserId)) {
-            articleVOs = articleService.listAllArticles(Integer.parseInt(articleUserId));
-        }else {
-            articleVOs = articleService.listAllArticles();
+        RequestObject object = null;
+        try {
+            object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+            String articleUserId = object.getArticleUserId();
+            if(object != null && !StringUtils.isBlank(articleUserId)) {
+                articleVOs = articleService.listAllArticles(Integer.parseInt(articleUserId));
+            }else {
+                articleVOs = articleService.listAllArticles();
+            }
+            renderJson(new Result(articleVOs));
+            return;
+        } catch (IOException e) {
+            log.error("");
         }
-        renderJson(new Result(articleVOs));
+        renderJson(new Result(null, 1, "failed to get articles"));
+
     }
 
     @ActionKey("/article/comment")

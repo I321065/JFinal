@@ -61,6 +61,10 @@ public class UserService {
     }
 
     public User getUserByUserIdAndUserName(long userId, String userName) {
+        if(userId <= 0) {
+            log.error("the userId is not right, userId=" + userId);
+            return null;
+        }
         String sql = "select userId, userName from user where userId = " + userId + " AND userName='" + userName + "';";
         log.info("get user by name and userId sql= " + sql);
         User user = User.dao.findFirst(sql);
@@ -120,7 +124,7 @@ public class UserService {
             Claims claims = JWTUtil.parseJWT(token);
             String userJson = claims.getSubject();
             JSONObject obj = (JSONObject) JSONObject.parse(userJson);
-            int userId = obj.getInteger("userId");
+            long userId = obj.getLongValue("userId");
             String userName = obj.getString("userName");
             log.info("parse User Token userId=" + userId + " userName=" + userName);
             user = getUserByUserIdAndUserName(userId, userName);
