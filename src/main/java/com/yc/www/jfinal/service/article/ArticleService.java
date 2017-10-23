@@ -1,9 +1,7 @@
 package com.yc.www.jfinal.service.article;
 
-import com.jfinal.aop.Before;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.user.UserService;
@@ -31,7 +29,7 @@ public class ArticleService {
     private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
     //private static String rootPath = "/apps/ironman/articles"; //production
     
-    public Article createArticle(String title, String content, int userId) {
+    public Article createArticle(String title, String content, long userId) {
         if(StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
             return null;
         }
@@ -45,7 +43,7 @@ public class ArticleService {
         return SaveToDBUtil.saveModel(article);
     }
 
-    private String saveArticleToDisk(String title, String content, int userId) {
+    private String saveArticleToDisk(String title, String content, long userId) {
         String dirPath = rootPath + File.separator + userId + File.separator;
         File dir = new File(dirPath);
         if(!dir.exists()) {
@@ -53,7 +51,6 @@ public class ArticleService {
                 log.error("failed to create directory, path=" + dir.getAbsolutePath());
                 return null;
             }
-
         }
         String filePath = dirPath + title + "_" + new Date().getTime();
         File article = new File(filePath);
@@ -99,7 +96,7 @@ public class ArticleService {
         return listAllArticles(-1);
     }
 
-    public List<ArticleVO> listAllArticles(int articleUserId) {
+    public List<ArticleVO> listAllArticles(long articleUserId) {
         StringBuilder sql = new StringBuilder("select * from article");
         if(articleUserId > 0) {
             sql.append(" where articleUserId = " + articleUserId);
@@ -120,7 +117,7 @@ public class ArticleService {
             vo.setArticleId(re.getLong("articleId"));
             vo.setTitle(re.getStr("articleTitle"));
             vo.setContent(getArticleContent(re.getStr("articleLocation")));
-            long articleUserId = re.getLong("articleUserId");
+            Long articleUserId = re.getLong("articleUserId") == null ? -1 : re.getLong("articleUserId");
             vo.setUserName(userService.getUserNameById(articleUserId));
             articleVOs.add(vo);
         }
