@@ -60,7 +60,7 @@ API:
       args:{
          articleId:1
          userId:xxx  (I can get this value from seesion after we open the login function
-         commentOverall:[-1,0,1]                
+         commentOverall:[0,1,2] //good is 1, bad is 2, default is 0          
       }
       
     
