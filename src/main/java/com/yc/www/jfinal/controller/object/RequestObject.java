@@ -6,7 +6,7 @@ package com.yc.www.jfinal.controller.object;
 public class RequestObject {
 
     public String publicKey;
-    public String userName;
+    public String username;
     public String password;
 
     public String title;
@@ -27,12 +27,12 @@ public class RequestObject {
         this.publicKey = publicKey;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

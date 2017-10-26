@@ -10,6 +10,7 @@ import com.yc.www.jfinal.service.article.CommentService;
 import com.yc.www.jfinal.service.article.bean.Article;
 import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.article.bean.Comment;
+import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
 import com.yc.www.jfinal.service.result.json.Result;
 import com.yc.www.jfinal.service.utils.ParseRequest;
@@ -72,21 +73,19 @@ public class ArticleController extends Controller {
     public void delete() {
         Result result = null;
         try {
-            //ArticleDeleteRequestObject object = ParseRequest.getObjectFromRequest(ArticleDeleteRequestObject.class, this);
             RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
             long articleId = object.getArticleId();
             boolean isSucceed = articleService.deleteArticleById(articleId);
             if(isSucceed) {
-                result = new Result(new ArticleDeleteRequestObject(articleId));
+                result = new Result(articleId);
             }else {
                 result = new Result("delete the article failed");
             }
         } catch (IOException e) {
             log.error("catch exception", e);
-            result = new Result("delete the article failed");
+            result = new Result(null, 1, Constants.CONTACT_ADMINISTRATOR);
         }
         renderJson(result);
-
     }
 
     @ActionKey("/article/list")
@@ -96,8 +95,12 @@ public class ArticleController extends Controller {
         RequestObject object = null;
         try {
             object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
-            String articleUserId = object.getArticleUserId();
-            if(object != null && !StringUtils.isBlank(articleUserId)) {
+            String articleUserId = null;
+            if(object != null) {
+                articleUserId = object.getArticleUserId();
+            }
+
+            if(!StringUtils.isBlank(articleUserId)) {
                 articleVOs = articleService.listAllArticles(Integer.parseInt(articleUserId));
             }else {
                 articleVOs = articleService.listAllArticles();
@@ -107,7 +110,7 @@ public class ArticleController extends Controller {
         } catch (IOException e) {
             log.error("");
         }
-        renderJson(new Result(null, 1, "failed to get articles"));
+        renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
 
     }
 

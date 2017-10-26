@@ -29,7 +29,6 @@ public class AppConfig extends JFinalConfig {
     public void configRoute(Routes routes) {
         this.routes = routes;
         routes.add("/", IndexController.class, "/");
-        routes.add("/register", RegisterController.class, "/");
         routes.add("/login", LoginController.class, "/");
         routes.add("/article",ArticleController.class, "/");
     }

@@ -18,9 +18,9 @@ import java.util.Date;
 public class UserService {
     private static final Logger log  = LogManager.getLogger(UserService.class);
 
-    public User getLoginUser(String userName, String password, String privateKey) {
+    public User getLoginUser(String username, String password) {
         try {
-            String sqlString = "select userId, password, salt from user where userName = '" + userName + "'";
+            String sqlString = "select userId, password, salt from user where username = '" + username + "'";
             log.info("get the user String=" + sqlString);
             User user = User.dao.findFirst(sqlString);
             log.info("user is null by DB query=" + user);
@@ -34,7 +34,7 @@ public class UserService {
             log.info("get the user password" + passWord);
             if(passWord.equals(pwdDB)) {
                 user.setUserId(user.getLong("userId"));
-                user.setUserName(userName);
+                user.setUsername(username);
                 return user;
             }else {
                 log.info("password is wrong");
@@ -46,35 +46,35 @@ public class UserService {
     }
 
     public User getUserByName(String name) {
-        String sql = "select userName from user where userName='" + name + "';";
+        String sql = "select username from user where username='" + name + "';";
         User user = User.dao.findFirst(sql);
         return user;
     }
 
-    public String getUserNameById(long userId) {
+    public String getUsernameById(long userId) {
         if(userId < 0) {
             log.error("userId is not right, userId=" + userId);
             return null;
         }
-        String sql = "select userName from user where userId=" + userId + ";";
+        String sql = "select username from user where userId=" + userId + ";";
         User user = User.dao.findFirst(sql);
         if(user != null) {
-            return user.getStr("userName");
+            return user.getStr("username");
         }
         return null;
     }
 
-    public User getUserByUserIdAndUserName(long userId, String userName) {
+    public User getUserByUserIdAndUsername(long userId, String username) {
         if(userId <= 0) {
             log.error("the userId is not right, userId=" + userId);
             return null;
         }
-        String sql = "select userId, userName from user where userId = " + userId + " AND userName='" + userName + "';";
+        String sql = "select userId, username from user where userId = " + userId + " AND username='" + username + "';";
         log.info("get user by name and userId sql= " + sql);
         User user = User.dao.findFirst(sql);
         if(user != null) {
             user.setUserId(user.getLong("userId"));
-            user.setUserName(user.getStr("userName"));
+            user.setUsername(user.getStr("username"));
         }
         log.info("get user by name and userId " + user);
         return user;
@@ -82,13 +82,13 @@ public class UserService {
 
     public void saveUser(User user) {
         User userDB = new User();
-        userDB.setUserName(user.getUserName());
+        userDB.setUsername(user.getUsername());
         String salt = MD5Util.generateSalt();
         userDB.setSalt(salt);
         userDB.setPassword(MD5Util.generate(user.getPassword(), salt));
         userDB.setCreateDate(new Date());
         userDB.setUpdateDate(new Date());
-        SaveToDBUtil.saveModel(user);
+        SaveToDBUtil.saveModel(userDB);
     }
 
     /**
@@ -99,7 +99,7 @@ public class UserService {
     private static String generateUserSubject(User user){
         JSONObject jo = new JSONObject();
         jo.put("userId", user.getUserId());
-        jo.put("userName", user.getUserName());
+        jo.put("username", user.getUsername());
         return jo.toJSONString();
     }
 
@@ -129,9 +129,9 @@ public class UserService {
             String userJson = claims.getSubject();
             JSONObject obj = (JSONObject) JSONObject.parse(userJson);
             long userId = obj.getLongValue("userId");
-            String userName = obj.getString("userName");
-            log.info("parse User Token userId=" + userId + " userName=" + userName);
-            user = getUserByUserIdAndUserName(userId, userName);
+            String username = obj.getString("username");
+            log.info("parse User Token userId=" + userId + " username=" + username);
+            user = getUserByUserIdAndUsername(userId, username);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("parse User token failed", e);

@@ -25,7 +25,7 @@ public class SessionInterceptor implements Interceptor {
         }else {
             User user = (User) session.getAttribute("user");
             if(user != null) {
-                logger.info("get the user from session, userName=" + user.getUserName());
+                logger.info("get the user from session, username=" + user.getUsername());
                 invocation.invoke();
                 return;
             }else {

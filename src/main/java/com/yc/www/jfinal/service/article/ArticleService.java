@@ -26,8 +26,8 @@ public class ArticleService {
 
     public static final Article dao = new Article().dao();
 
-    private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
-    //private static String rootPath = "/apps/ironman/articles"; //production
+    //private static String rootPath = "/home/superuser/workspace/temp/ironman/articles"; //local
+    private static String rootPath = "/apps/ironman/articles"; //production
     
     public Article createArticle(String title, String content, long userId) {
         if(StringUtils.isBlank(title) || StringUtils.isBlank(content)) {
@@ -118,7 +118,7 @@ public class ArticleService {
             vo.setTitle(re.getStr("articleTitle"));
             vo.setContent(getArticleContent(re.getStr("articleLocation")));
             Long articleUserId = re.getLong("articleUserId") == null ? -1 : re.getLong("articleUserId");
-            vo.setUserName(userService.getUserNameById(articleUserId));
+            vo.setUsername(userService.getUsernameById(articleUserId));
             articleVOs.add(vo);
         }
         return articleVOs;

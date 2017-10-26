@@ -12,14 +12,14 @@ API:
 
   locate to login page: {rootPath}/login
      args:{
-        userName:xxx,
-        passWord:xxx,
+        username:xxx,
+        password:xxx,
         publicKey:xxx
      }
      
      return:{
         data:{
-           userName:xxx
+           username:xxx
            token:xxx      
         }
         errorNum:xxx
@@ -30,8 +30,8 @@ API:
   
   create a new user: {rootPath}/register 
     args:{
-       userName:xxx,
-       passWord:xxx
+       username:xxx,
+       password:xxx
     }
     
     

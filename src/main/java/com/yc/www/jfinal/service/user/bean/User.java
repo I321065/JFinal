@@ -12,7 +12,7 @@ public class User extends Entity<User> {
     public static final User dao = new User().dao();
 
     private long userId;
-    private String userName;
+    private String username;
     private String password;
     private String salt;
 
@@ -21,9 +21,9 @@ public class User extends Entity<User> {
 
     public User() {}
 
-    public User(String userName, String passWord) {
-        this.userName = userName;
-        this.password = passWord;
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public long getUserId() {
@@ -34,12 +34,12 @@ public class User extends Entity<User> {
         this.userId = userId;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
