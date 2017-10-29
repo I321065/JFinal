@@ -12,7 +12,8 @@ import com.yc.www.jfinal.service.article.bean.ArticleVO;
 import com.yc.www.jfinal.service.article.bean.Comment;
 import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
-import com.yc.www.jfinal.service.result.json.Result;
+import com.yc.www.jfinal.service.result.json.ResponseError;
+import com.yc.www.jfinal.service.result.json.ResponseResult;
 import com.yc.www.jfinal.service.utils.ParseRequest;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -49,18 +50,18 @@ public class ArticleController extends Controller {
             }
 
             Article article = articleService.createArticle(articleTitle, articleContent, userId);
-            Result result = null;
+            ResponseResult result = null;
             if(article != null) {
-                result = new Result(article);
+                result = new ResponseResult(article);
             }else{
-                result = new Result("something wrong happened, please contact administrator");
+                result = new ResponseResult("something wrong happened, please contact administrator");
             }
             renderJson(result);
             return;
         } catch (IOException e) {
             log.error("catch exception", e);
         }
-        renderJson(new Result("something wrong happened, please contact administrator"));
+        renderJson(new ResponseResult("something wrong happened, please contact administrator"));
     }
 
     @ActionKey("/article/update")
@@ -71,19 +72,19 @@ public class ArticleController extends Controller {
 
     @ActionKey("/article/delete")
     public void delete() {
-        Result result = null;
+        ResponseResult result = null;
         try {
             RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
             long articleId = object.getArticleId();
             boolean isSucceed = articleService.deleteArticleById(articleId);
             if(isSucceed) {
-                result = new Result(articleId);
+                result = new ResponseResult(articleId);
             }else {
-                result = new Result("delete the article failed");
+                result = new ResponseResult("delete the article failed");
             }
         } catch (IOException e) {
             log.error("catch exception", e);
-            result = new Result(null, 1, Constants.CONTACT_ADMINISTRATOR);
+            result = new ResponseResult(null, new ResponseError(Constants.CONTACT_ADMINISTRATOR));
         }
         renderJson(result);
     }
@@ -105,12 +106,12 @@ public class ArticleController extends Controller {
             }else {
                 articleVOs = articleService.listAllArticles();
             }
-            renderJson(new Result(articleVOs));
+            renderJson(new ResponseResult(articleVOs));
             return;
         } catch (IOException e) {
             log.error("");
         }
-        renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
+        renderJson(new ResponseResult(null, new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
 
     }
 

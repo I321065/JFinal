@@ -5,7 +5,8 @@ import com.jfinal.core.Controller;
 
 import com.yc.www.jfinal.controller.object.*;
 import com.yc.www.jfinal.service.common.Constants;
-import com.yc.www.jfinal.service.result.json.Result;
+import com.yc.www.jfinal.service.result.json.ResponseError;
+import com.yc.www.jfinal.service.result.json.ResponseResult;
 import com.yc.www.jfinal.service.user.UserService;
 import com.yc.www.jfinal.service.user.bean.User;
 import com.yc.www.jfinal.service.user.bean.vo.UserVO;
@@ -34,24 +35,24 @@ public class LoginController extends Controller{
 
     private static Map<String, String> keyPairs = new ConcurrentHashMap<String, String>();
 
-    @ActionKey("/getPublicKey")
-    public void getPublickey() {
+    @ActionKey("/publicKey")
+    public void publicKey() {
         try {
             List<String> loginKeyPair = RSAUtil.createLoginKeyPair();
             if(loginKeyPair == null || loginKeyPair.size() != 2) {
-                renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
+                renderJson(new ResponseResult(new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
                 return;
             }
             String publicKey = loginKeyPair.get(0);
             String privateKey = loginKeyPair.get(1);
             JedisUtil.set(publicKey, privateKey);
-            Result result = new Result(publicKey, 1, null);
+            ResponseResult result = new ResponseResult(publicKey);
             renderJson(result);
             return;
         } catch (Exception e) {
             log.error("catch exception", e);
         }
-        renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
+        renderJson(new ResponseResult(new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
     }
 
 
@@ -63,7 +64,7 @@ public class LoginController extends Controller{
             String password = object.getPassword();
             String publicKey = object.getPublicKey();
             if(StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-                renderJson(new Result(null, 1,"the user Name or password can be null"));
+                renderJson(new ResponseResult(new ResponseError("the user Name or password can be null")));
                 return;
             }
             String privateKey = JedisUtil.getStringValue(publicKey);
@@ -71,27 +72,27 @@ public class LoginController extends Controller{
             User user = userService.getUserByName(username);
             if(user != null) {
                 log.info("The user name has been registered, please change it, username=" + username);
-                renderJson(new Result(null, 1, "The user name has been registered, please change it"));
+                renderJson(new ResponseResult(new ResponseError("The user name has been registered, please change it")));
                 return;
             }
             user = new User(username, pwd);
             userService.saveUser(user);
             User loginUser = userService.getLoginUser(username, pwd);
             if(loginUser == null) {
-                renderJson(new Result(null, 1, "the password is not right"));
+                renderJson(new ResponseResult(new ResponseError("the password is not right")));
                 return;
             }
             UserVO uVO = new UserVO();
             uVO.setUsername(user.getUsername());
             uVO.setToken(userService.generateUserToken(user));
-            renderJson(new Result(uVO));
+            renderJson(new ResponseResult(uVO));
             return;
         } catch (IOException e) {
             log.error("failed to get request object", e);
         } catch (Exception e) {
             log.error("catch exception", e);
         }
-        renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
+        renderJson(new ResponseResult(new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
     }
 
 
@@ -108,19 +109,19 @@ public class LoginController extends Controller{
             String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));
             User user = userService.getLoginUser(uName, pwd);
             if(user == null) {
-                renderJson(new Result(null, 1, "the password is not right"));
+                renderJson(new ResponseResult(new ResponseError("the password is not right")));
                 return;
             }
             UserVO uVO = new UserVO();
             uVO.setUsername(user.getUsername());
             uVO.setToken(userService.generateUserToken(user));
-            renderJson(new Result(uVO));
+            renderJson(new ResponseResult(uVO));
             return;
         } catch (Exception e) {
             log.error("catch exception", e);
         }
 
-        renderJson(new Result(null, 1, Constants.CONTACT_ADMINISTRATOR));
+        renderJson(new ResponseResult(new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
     }
 
 }

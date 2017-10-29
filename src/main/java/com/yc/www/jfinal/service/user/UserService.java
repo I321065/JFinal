@@ -23,7 +23,7 @@ public class UserService {
             String sqlString = "select userId, password, salt from user where username = '" + username + "'";
             log.info("get the user String=" + sqlString);
             User user = User.dao.findFirst(sqlString);
-            log.info("user is null by DB query=" + user);
+
             if(user == null) {
                 log.info("user is null by DB query");
                 return null;
@@ -31,7 +31,7 @@ public class UserService {
             String salt = user.getStr("salt");
             String pwdDB = user.getStr("password");
             String passWord = MD5Util.generate(password, salt);
-            log.info("get the user password" + passWord);
+            log.info("get the user password=" + passWord);
             if(passWord.equals(pwdDB)) {
                 user.setUserId(user.getLong("userId"));
                 user.setUsername(username);

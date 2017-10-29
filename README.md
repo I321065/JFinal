@@ -9,6 +9,11 @@ framework:JFinal
 
 API:
   rootPath: host:8080/ironman
+  
+  get the public key:{rootPath}/publicKey
+     return {
+        publicKey:
+     }
 
   locate to login page: {rootPath}/login
      args:{
