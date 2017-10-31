@@ -1,8 +1,8 @@
-package com.yc.www.jfinal.service.user;
+package com.yc.www.jfinal.service;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yc.www.jfinal.service.common.Constants;
-import com.yc.www.jfinal.service.user.bean.User;
+import com.yc.www.jfinal.service.entity.User;
 import com.yc.www.jfinal.service.utils.*;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang.StringUtils;
@@ -121,6 +121,7 @@ public class UserService {
 
     public User parseUserToken(String token) {
         if(StringUtils.isBlank(token)) {
+            log.error("token is null");
             return null;
         }
         User user = null;

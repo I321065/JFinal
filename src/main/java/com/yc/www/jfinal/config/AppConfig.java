@@ -10,9 +10,9 @@ import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.template.Engine;
 import com.yc.www.jfinal.controller.*;
-import com.yc.www.jfinal.service.article.bean.Article;
-import com.yc.www.jfinal.service.article.bean.Comment;
-import com.yc.www.jfinal.service.user.bean.User;
+import com.yc.www.jfinal.service.entity.Article;
+import com.yc.www.jfinal.service.entity.Comment;
+import com.yc.www.jfinal.service.entity.User;
 
 /**
  * Created by Nick on 2017/3/5.

@@ -19,6 +19,8 @@ public class RequestObject {
     public int commentOverall;
     public String commentDetail;
 
+    public String token;
+
     public String getPublicKey() {
         return publicKey;
     }
@@ -99,4 +101,11 @@ public class RequestObject {
         this.commentDetail = commentDetail;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

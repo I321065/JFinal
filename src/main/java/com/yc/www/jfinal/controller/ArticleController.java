@@ -5,22 +5,27 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 
 import com.yc.www.jfinal.controller.object.*;
-import com.yc.www.jfinal.service.article.ArticleService;
-import com.yc.www.jfinal.service.article.CommentService;
-import com.yc.www.jfinal.service.article.bean.Article;
-import com.yc.www.jfinal.service.article.bean.ArticleVO;
-import com.yc.www.jfinal.service.article.bean.Comment;
+import com.yc.www.jfinal.service.annotaion.PermissionCheck;
+import com.yc.www.jfinal.service.ArticleService;
+import com.yc.www.jfinal.service.CommentService;
+import com.yc.www.jfinal.service.common.Role;
+import com.yc.www.jfinal.service.entity.Article;
+import com.yc.www.jfinal.service.vo.ArticleVO;
+import com.yc.www.jfinal.service.entity.Comment;
 import com.yc.www.jfinal.service.common.Constants;
 import com.yc.www.jfinal.service.interceptor.UserTokenInterceptor;
-import com.yc.www.jfinal.service.result.json.ResponseError;
-import com.yc.www.jfinal.service.result.json.ResponseResult;
+import com.yc.www.jfinal.service.result.ResponseError;
+import com.yc.www.jfinal.service.result.ResponseResult;
 import com.yc.www.jfinal.service.utils.ParseRequest;
+import com.yc.www.jfinal.service.vo.CommentVO;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.yc.www.jfinal.service.common.Constants.USER_ID;
 
 /**
  * Created by superuser on 9/18/17.
@@ -34,7 +39,8 @@ public class ArticleController extends Controller {
     CommentService commentService = new CommentService();
 
     @ActionKey("/article/save")
-    //@Before(UserTokenInterceptor.class)
+    @Before(UserTokenInterceptor.class)
+    @PermissionCheck(Role.User)
     public void save() {
         //User user = getAttr("user");//get user from token
         //int userId = user.getUserId();
@@ -66,6 +72,7 @@ public class ArticleController extends Controller {
 
     @ActionKey("/article/update")
     @Before(UserTokenInterceptor.class)
+    @PermissionCheck(Role.User)
     public void update() {
         renderJson("you can edit");
     }
@@ -90,7 +97,7 @@ public class ArticleController extends Controller {
     }
 
     @ActionKey("/article/list")
-    //@Before(UserTokenInterceptor.class)
+    @Before(UserTokenInterceptor.class)
     public void list() {
         List<ArticleVO> articleVOs = null;
         RequestObject object = null;
@@ -116,25 +123,39 @@ public class ArticleController extends Controller {
     }
 
     @ActionKey("/article/comment")
-    //@Before(UserTokenInterceptor.class)
+    @Before(UserTokenInterceptor.class)
+    @PermissionCheck(Role.User)
     public void comment() {
         /*int articleId = 1;
         int userId = 1;
         String commentDetail = "";
         int commentOverall = 1;*/
-
-        try {
-            RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
-            Comment comment = new Comment();
-            comment.setArticleId(object.getArticleId());
-            comment.setCommentUserId(object.getUserId());
-            comment.setCommentDetail(object.getCommentDetail());
-            comment.setCommentOverall(object.getCommentOverall());
-            Comment saveBean = commentService.save(comment);
-        } catch (IOException e) {
-            log.error("catch exceptio");
+        long userId = (Long)getAttr(USER_ID);
+        if(userId <= 0) {
+            renderJson(new ResponseResult(new Error("userId is not right, userId=" + userId)));
+            return;
         }
-        renderJson("jfljaldfjjsdfjalsjdfl");
+        RequestObject object = null;
+        long articleId = -1;
+        int commentOverall = -1;
+        try {
+            object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+            articleId = object.getArticleId();
+            commentOverall = object.getCommentOverall();
+            if(articleId > 0 && commentOverall > 0) {
+                Comment comment = new Comment();
+                comment.setArticleId(articleId);
+                comment.setCommentUserId(userId);
+                //comment.setCommentDetail(object.getCommentDetail());
+                comment.setCommentOverall(object.getCommentOverall());
+                Comment saveBean = commentService.save(comment);
+                renderJson(new ResponseResult(new CommentVO(articleId, commentOverall)));
+                return;
+            }
+        } catch (IOException e) {
+            log.error("catch IO except", e);
+        }
+        renderJson(new ResponseResult("something wrong happened, please contact administrator"));
     }
 
 }

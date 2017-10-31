@@ -17,7 +17,7 @@ public class JedisUtil {
     public static String set(String key, String value) {
         Jedis jedis = JedisFactory.getJedis();
         jedis.set(key, value);
-        logger.info("=========================" + key);
+        logger.info("set redis key-value, key=" + key + ", value=" + value);
         logger.info("=========================" + value);
         //jedis.expire(key,10);//expire in 10s
         return key;
@@ -25,10 +25,9 @@ public class JedisUtil {
 
     public static String getStringValue(String key) {
         Jedis jedis = JedisFactory.getJedis();
-        String temp = jedis.get(key);
-        logger.info("=========================" + key);
-        logger.info("=========================" + temp);
-        return temp;
+        String value = jedis.get(key);
+        logger.info("Get redis key-value, key=" + key + ", value=" + value);
+        return value;
     }
 
 }

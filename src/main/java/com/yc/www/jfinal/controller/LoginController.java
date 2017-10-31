@@ -5,11 +5,11 @@ import com.jfinal.core.Controller;
 
 import com.yc.www.jfinal.controller.object.*;
 import com.yc.www.jfinal.service.common.Constants;
-import com.yc.www.jfinal.service.result.json.ResponseError;
-import com.yc.www.jfinal.service.result.json.ResponseResult;
-import com.yc.www.jfinal.service.user.UserService;
-import com.yc.www.jfinal.service.user.bean.User;
-import com.yc.www.jfinal.service.user.bean.vo.UserVO;
+import com.yc.www.jfinal.service.result.ResponseError;
+import com.yc.www.jfinal.service.result.ResponseResult;
+import com.yc.www.jfinal.service.UserService;
+import com.yc.www.jfinal.service.entity.User;
+import com.yc.www.jfinal.service.vo.UserVO;
 import com.yc.www.jfinal.service.utils.Base64Util;
 import com.yc.www.jfinal.service.utils.JedisUtil;
 import com.yc.www.jfinal.service.utils.ParseRequest;
@@ -104,6 +104,15 @@ public class LoginController extends Controller{
             String publicKey = loginRequestObject.getPublicKey();
             String uName = loginRequestObject.getUsername();
             String password = loginRequestObject.getPassword();
+            /*String publicKey = getPara("publicKey");
+            String uName = getPara("username");
+            String password = getPara("password");*/
+
+            if(StringUtils.isBlank(publicKey) || StringUtils.isBlank(uName) || StringUtils.isBlank(password)) {
+                log.error("failed to load login user, publicKey=" + publicKey + ", uName=" + uName + ", password=" + password);
+                renderJson(new ResponseResult(new ResponseError("the login user message upload failed")));
+                return;
+            }
 
             String privateKey = JedisUtil.getStringValue(publicKey);
             String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));

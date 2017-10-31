@@ -1,6 +1,6 @@
-package com.yc.www.jfinal.service.article;
+package com.yc.www.jfinal.service;
 
-import com.yc.www.jfinal.service.article.bean.Comment;
+import com.yc.www.jfinal.service.entity.Comment;
 import com.yc.www.jfinal.service.utils.SaveToDBUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

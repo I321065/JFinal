@@ -1,4 +1,6 @@
-package com.yc.www.jfinal.service.result.json;
+package com.yc.www.jfinal.service.result;
+
+import com.yc.www.jfinal.service.result.ResponseError;
 
 /**
  * Created by superuser on 9/16/17.
@@ -10,7 +12,7 @@ public class ResponseResult {
     private ResponseError error;
 
     public ResponseResult(Object data) {
-        this(data, null);
+        this(data, new ResponseError());
     }
 
     public ResponseResult(ResponseError error) {

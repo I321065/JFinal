@@ -1,10 +1,8 @@
 package com.yc.www.jfinal.controller;
 
-import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.yc.www.jfinal.service.interceptor.SessionInterceptor;
-import com.yc.www.jfinal.service.user.bean.User;
+import com.yc.www.jfinal.service.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,7 +14,6 @@ public class IndexController extends Controller {
     private User user;
 
     @ActionKey("/index")
-    @Before(SessionInterceptor.class)
     public void index() {
         renderJson("hello word");
     }

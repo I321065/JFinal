@@ -1,10 +1,9 @@
-package com.yc.www.jfinal.service.article;
+package com.yc.www.jfinal.service;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.yc.www.jfinal.service.article.bean.Article;
-import com.yc.www.jfinal.service.article.bean.ArticleVO;
-import com.yc.www.jfinal.service.user.UserService;
+import com.yc.www.jfinal.service.entity.Article;
+import com.yc.www.jfinal.service.vo.ArticleVO;
 import com.yc.www.jfinal.service.utils.SaveToDBUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package com.yc.www.jfinal.service.user.bean;
+package com.yc.www.jfinal.service.entity;
 
 import com.yc.www.jfinal.service.common.Entity;
 

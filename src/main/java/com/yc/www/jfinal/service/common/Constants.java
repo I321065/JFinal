@@ -12,5 +12,6 @@ public class Constants {
     public static final int JWT_REFRESH_INTERVAL = 55*60*1000;  //millisecond
     public static final int JWT_REFRESH_TTL = 12*60*60*1000;  //millisecond
     public static final String CONTACT_ADMINISTRATOR = "this operation failed, please contact administrator";
+    public static final String USER_ID = "user_id";
 
 }

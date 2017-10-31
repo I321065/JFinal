@@ -1,4 +1,4 @@
-package com.yc.www.jfinal.service.article.bean;
+package com.yc.www.jfinal.service.vo;
 
 /**
  * Created by superuser on 9/25/17.
