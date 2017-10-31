@@ -46,12 +46,12 @@ API:
          content:xxx
      }
       
-  list all articles: {rootPath}/article/list 
+  list all articles: {rootPath}/article/all 
      args:{
         
      }
      
-  list all articles that the argument is user's userId: {rootPath}/article/list 
+  list all articles that the argument is user's userId: {rootPath}/article/userId 
      args:{
         articleUserId:xxx
      }

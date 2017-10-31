@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.List;
 
+import static com.yc.www.jfinal.service.common.Constants.CONTACT_ADMINISTRATOR;
 import static com.yc.www.jfinal.service.common.Constants.USER_ID;
 
 /**
@@ -32,7 +33,7 @@ import static com.yc.www.jfinal.service.common.Constants.USER_ID;
  */
 public class ArticleController extends Controller {
 
-    Logger log = LogManager.getLogger(ArticleController.class);
+    private static final Logger log = LogManager.getLogger(ArticleController.class);
 
     ArticleService articleService = new ArticleService();
 
@@ -44,10 +45,9 @@ public class ArticleController extends Controller {
     public void save() {
         //User user = getAttr("user");//get user from token
         //int userId = user.getUserId();
-        int userId = 1;
-
-        try {
-            RequestObject articleRequestObject = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        RequestObject articleRequestObject = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        if(isPostRequest(articleRequestObject)) {
+            long userId = getAttr(USER_ID);
             String articleTitle = articleRequestObject.getTitle();
             String articleContent = articleRequestObject.getContent();
             if(StringUtils.isBlank(articleTitle) || StringUtils.isBlank(articleContent)) {
@@ -59,15 +59,12 @@ public class ArticleController extends Controller {
             ResponseResult result = null;
             if(article != null) {
                 result = new ResponseResult(article);
-            }else{
-                result = new ResponseResult("something wrong happened, please contact administrator");
             }
             renderJson(result);
             return;
-        } catch (IOException e) {
-            log.error("catch exception", e);
         }
-        renderJson(new ResponseResult("something wrong happened, please contact administrator"));
+        log.error("this request must be post request");
+        renderJson(new ResponseResult(new ResponseError("something wrong happened, please contact administrator")));
     }
 
     @ActionKey("/article/update")
@@ -80,46 +77,44 @@ public class ArticleController extends Controller {
     @ActionKey("/article/delete")
     public void delete() {
         ResponseResult result = null;
-        try {
-            RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        if(!isPostRequest(object)) {
             long articleId = object.getArticleId();
             boolean isSucceed = articleService.deleteArticleById(articleId);
             if(isSucceed) {
                 result = new ResponseResult(articleId);
-            }else {
-                result = new ResponseResult("delete the article failed");
             }
-        } catch (IOException e) {
-            log.error("catch exception", e);
-            result = new ResponseResult(null, new ResponseError(Constants.CONTACT_ADMINISTRATOR));
+            renderJson(result);
+            return;
         }
-        renderJson(result);
+        log.error("this request must be post request");
+        renderJson(new ResponseResult(new ResponseError("something wrong happened, please contact administrator")));
     }
 
-    @ActionKey("/article/list")
+    @ActionKey("/article/all")
+    public void all() {
+        List<ArticleVO> articleVOs = articleService.listAllArticles();
+        renderJson(new ResponseResult(articleVOs));
+    }
+
+    @ActionKey("/article/userId")
     @Before(UserTokenInterceptor.class)
     public void list() {
         List<ArticleVO> articleVOs = null;
-        RequestObject object = null;
-        try {
-            object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
-            String articleUserId = null;
-            if(object != null) {
-                articleUserId = object.getArticleUserId();
-            }
-
+        RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        if(isPostRequest(object)) {
+            String articleUserId = object.getArticleUserId();
             if(!StringUtils.isBlank(articleUserId)) {
-                articleVOs = articleService.listAllArticles(Integer.parseInt(articleUserId));
+                articleVOs = articleService.listAllArticles(Long.parseLong(articleUserId));
+                renderJson(new ResponseResult(articleVOs));
+                return;
             }else {
-                articleVOs = articleService.listAllArticles();
+                log.error("the request is post, but articleId is null");
             }
-            renderJson(new ResponseResult(articleVOs));
-            return;
-        } catch (IOException e) {
-            log.error("");
+        }else {
+            log.error("this is not post request");
         }
-        renderJson(new ResponseResult(null, new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
-
+        renderJson(new ResponseResult(new ResponseError(CONTACT_ADMINISTRATOR)));
     }
 
     @ActionKey("/article/comment")
@@ -130,16 +125,15 @@ public class ArticleController extends Controller {
         int userId = 1;
         String commentDetail = "";
         int commentOverall = 1;*/
-        long userId = (Long)getAttr(USER_ID);
-        if(userId <= 0) {
+        Long userId = (Long)getAttr(USER_ID);
+        if(userId == null) {
             renderJson(new ResponseResult(new Error("userId is not right, userId=" + userId)));
             return;
         }
-        RequestObject object = null;
+        RequestObject object =ParseRequest.getObjectFromRequest(RequestObject.class, this);
         long articleId = -1;
         int commentOverall = -1;
-        try {
-            object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
+        if(isPostRequest(object)) {
             articleId = object.getArticleId();
             commentOverall = object.getCommentOverall();
             if(articleId > 0 && commentOverall > 0) {
@@ -152,10 +146,19 @@ public class ArticleController extends Controller {
                 renderJson(new ResponseResult(new CommentVO(articleId, commentOverall)));
                 return;
             }
-        } catch (IOException e) {
-            log.error("catch IO except", e);
+            log.error("can not parse articleId or commentOverall, articleId=" + articleId + ", commentOverall=" + commentOverall);
+        }else {
+            log.error("this request must be post request");
         }
-        renderJson(new ResponseResult("something wrong happened, please contact administrator"));
+        renderJson(new ResponseResult(new ResponseError("something wrong happened, please contact administrator")));
+        return;
+    }
+
+    private boolean isPostRequest(RequestObject object) {
+        if(object == null) {
+            return false;
+        }
+        return true;
     }
 
 }

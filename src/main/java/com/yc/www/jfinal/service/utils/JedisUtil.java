@@ -4,8 +4,6 @@ import com.yc.www.jfinal.service.factory.JedisFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPoolConfig;
 
 /**
  * Created by superuser on 9/15/17.

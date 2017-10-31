@@ -60,33 +60,35 @@ public class LoginController extends Controller{
     public void register() {
         try {
             RequestObject object = ParseRequest.getObjectFromRequest(RequestObject.class, this);
-            String username = object.getUsername();
-            String password = object.getPassword();
-            String publicKey = object.getPublicKey();
-            if(StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-                renderJson(new ResponseResult(new ResponseError("the user Name or password can be null")));
+            if(object != null) {
+                String username = object.getUsername();
+                String password = object.getPassword();
+                String publicKey = object.getPublicKey();
+                if(StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+                    renderJson(new ResponseResult(new ResponseError("the user Name or password can be null")));
+                    return;
+                }
+                String privateKey = JedisUtil.getStringValue(publicKey);
+                String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));
+                User user = userService.getUserByName(username);
+                if(user != null) {
+                    log.info("The user name has been registered, please change it, username=" + username);
+                    renderJson(new ResponseResult(new ResponseError("The user name has been registered, please change it")));
+                    return;
+                }
+                user = new User(username, pwd);
+                userService.saveUser(user);
+                User loginUser = userService.getLoginUser(username, pwd);
+                if(loginUser == null) {
+                    renderJson(new ResponseResult(new ResponseError("the password is not right")));
+                    return;
+                }
+                UserVO uVO = new UserVO();
+                uVO.setUsername(user.getUsername());
+                uVO.setToken(userService.generateUserToken(user));
+                renderJson(new ResponseResult(uVO));
                 return;
             }
-            String privateKey = JedisUtil.getStringValue(publicKey);
-            String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));
-            User user = userService.getUserByName(username);
-            if(user != null) {
-                log.info("The user name has been registered, please change it, username=" + username);
-                renderJson(new ResponseResult(new ResponseError("The user name has been registered, please change it")));
-                return;
-            }
-            user = new User(username, pwd);
-            userService.saveUser(user);
-            User loginUser = userService.getLoginUser(username, pwd);
-            if(loginUser == null) {
-                renderJson(new ResponseResult(new ResponseError("the password is not right")));
-                return;
-            }
-            UserVO uVO = new UserVO();
-            uVO.setUsername(user.getUsername());
-            uVO.setToken(userService.generateUserToken(user));
-            renderJson(new ResponseResult(uVO));
-            return;
         } catch (IOException e) {
             log.error("failed to get request object", e);
         } catch (Exception e) {
@@ -101,35 +103,33 @@ public class LoginController extends Controller{
         try {
             //parse json request
             RequestObject loginRequestObject = ParseRequest.getObjectFromRequest(RequestObject.class, this);
-            String publicKey = loginRequestObject.getPublicKey();
-            String uName = loginRequestObject.getUsername();
-            String password = loginRequestObject.getPassword();
-            /*String publicKey = getPara("publicKey");
-            String uName = getPara("username");
-            String password = getPara("password");*/
+            if(loginRequestObject != null) {
+                String publicKey = loginRequestObject.getPublicKey();
+                String uName = loginRequestObject.getUsername();
+                String password = loginRequestObject.getPassword();
 
-            if(StringUtils.isBlank(publicKey) || StringUtils.isBlank(uName) || StringUtils.isBlank(password)) {
-                log.error("failed to load login user, publicKey=" + publicKey + ", uName=" + uName + ", password=" + password);
-                renderJson(new ResponseResult(new ResponseError("the login user message upload failed")));
+                if(StringUtils.isBlank(publicKey) || StringUtils.isBlank(uName) || StringUtils.isBlank(password)) {
+                    log.error("failed to load login user, publicKey=" + publicKey + ", uName=" + uName + ", password=" + password);
+                    renderJson(new ResponseResult(new ResponseError("the login user message upload failed")));
+                    return;
+                }
+
+                String privateKey = JedisUtil.getStringValue(publicKey);
+                String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));
+                User user = userService.getLoginUser(uName, pwd);
+                if(user == null) {
+                    renderJson(new ResponseResult(new ResponseError("the password is not right")));
+                    return;
+                }
+                UserVO uVO = new UserVO();
+                uVO.setUsername(user.getUsername());
+                uVO.setToken(userService.generateUserToken(user));
+                renderJson(new ResponseResult(uVO));
                 return;
             }
-
-            String privateKey = JedisUtil.getStringValue(publicKey);
-            String pwd = new String(RSAUtil.decryptByPrivateKey(Base64Util.decodeString(password), privateKey));
-            User user = userService.getLoginUser(uName, pwd);
-            if(user == null) {
-                renderJson(new ResponseResult(new ResponseError("the password is not right")));
-                return;
-            }
-            UserVO uVO = new UserVO();
-            uVO.setUsername(user.getUsername());
-            uVO.setToken(userService.generateUserToken(user));
-            renderJson(new ResponseResult(uVO));
-            return;
         } catch (Exception e) {
             log.error("catch exception", e);
         }
-
         renderJson(new ResponseResult(new ResponseError(Constants.CONTACT_ADMINISTRATOR)));
     }
 

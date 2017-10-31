@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
  */
 public class IndexController extends Controller {
     Logger logger = LogManager.getLogger(IndexController.class);
-    private User user;
 
     @ActionKey("/index")
     public void index() {

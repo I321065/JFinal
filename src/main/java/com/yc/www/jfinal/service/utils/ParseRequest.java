@@ -2,6 +2,8 @@ package com.yc.www.jfinal.service.utils;
 
 import com.alibaba.fastjson.JSONObject;
 import com.jfinal.core.Controller;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,15 +13,22 @@ import java.io.IOException;
  */
 public class ParseRequest {
 
-    public static <T> T getObjectFromRequest(Class<T> t, Controller controller) throws IOException {
-        StringBuilder json = new StringBuilder();
-        BufferedReader reader = controller.getRequest().getReader();
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            json.append(line);
-        }
-        reader.close();
+    private static final Logger log = LogManager.getLogger(ParseRequest.class);
 
-        return JSONObject.parseObject(json.toString(), t);
+    public static <T> T getObjectFromRequest(Class<T> t, Controller controller) {
+        StringBuilder json = new StringBuilder();
+        BufferedReader reader = null;
+        try {
+            reader = controller.getRequest().getReader();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                json.append(line);
+            }
+            reader.close();
+            return JSONObject.parseObject(json.toString(), t);
+        } catch (IOException e) {
+            log.error("failed to parse object from request", e);
+        }
+        return null;
     }
 }
